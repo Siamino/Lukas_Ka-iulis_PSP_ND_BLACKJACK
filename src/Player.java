@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Player extends Person{
+public class Player extends Person{ //paveldejimas
     Scanner decision = new Scanner(System.in);
     public Player() {
         super.setName("Player");

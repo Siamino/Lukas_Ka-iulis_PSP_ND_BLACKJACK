@@ -7,6 +7,18 @@ public class Game {
     private int losses;
     private int evens;
 
+    static final int shortPause = 500;
+
+    static final int longPause = 1000;
+
+    private String youWinLogo = "##    ##  #######  ##     ##    ##      ## #### ##    ## \n" +
+            " ##  ##  ##     ## ##     ##    ##  ##  ##  ##  ###   ## \n" +
+            "  ####   ##     ## ##     ##    ##  ##  ##  ##  ####  ## \n" +
+            "   ##    ##     ## ##     ##    ##  ##  ##  ##  ## ## ## \n" +
+            "   ##    ##     ## ##     ##    ##  ##  ##  ##  ##  #### \n" +
+            "   ##    ##     ## ##     ##    ##  ##  ##  ##  ##   ### \n" +
+            "   ##     #######   #######      ###  ###  #### ##    ## ";
+
     public Game() {
         this.wins = 0;
         this.losses = 0;
@@ -14,8 +26,8 @@ public class Game {
         deck = new Deck(true);
         discarded = new Deck();
 
-        dealer = new Dealer();
-        player = new Player();
+        dealer = new Dealer(); //paveldejimas
+        player = new Player(); //paveldejimas
 
         deck.shuffle();
         startRound();
@@ -27,7 +39,7 @@ public class Game {
             System.out.println("Starting next round - Wins: " + wins + " Losses: " + losses + " Evens: " + evens);
             dealer.getHand().discardHandToDeck(discarded);
             player.getHand().discardHandToDeck(discarded);
-            pause(1000);
+            pause(longPause);
         }
         if (deck.cardsLeft() < 4) {
             deck.reloadDeckFromDiscard(discarded);
@@ -38,45 +50,47 @@ public class Game {
         player.getHand().takeCardFromDeck(deck);
         player.getHand().takeCardFromDeck(deck);
 
-        dealer.printFirstHand();
-        pause(500);
+        dealer.printHand(); //Polimorfizmas
+        pause(shortPause);
         player.printHand();
-        pause(500);
+        pause(shortPause);
 
         if (dealer.hasBlackJack()) {
             dealer.printHand();
             if (player.hasBlackJack()) {
                 System.out.println("You both have 21 - Even\n");
-                pause(1000);
+                pause(longPause);
                 evens++;
                 startRound();
             } else {
-                System.out.println("Dealer has BlackJack. You lose.\n");
-                pause(1000);
+                System.out.println("Dealer has BlackJack. (YOU LOSE)\n");
+                pause(longPause);
                 dealer.printHand();
                 losses++;
                 startRound();
             }
         }
         if (player.hasBlackJack()) {
-            System.out.println("You have BlackJack! (You win)\n");
-            pause(1000);
+            System.out.println("You have BlackJack!");
+            System.out.println(youWinLogo);
+            pause(longPause);
             wins++;
             startRound();
         }
 
         player.makeDecision(deck, discarded);
         if (player.hasBlackJack()) {
-            System.out.println("You have BlackJack! (You win)\n");
-            pause(1000);
+            System.out.println("You have BlackJack!");
+            System.out.println(youWinLogo);
+            pause(longPause);
             wins++;
             startRound();
         }
-        pause(500);
+        pause(shortPause);
 
         if (player.getHand().calculatedScore() > 21) {
-            System.out.println("You have gone over 21 (You lose)\n");
-            pause(1000);
+            System.out.println("You have gone over 21 (YOU LOSE)\n");
+            pause(longPause);
             losses++;
             startRound();
         }
@@ -85,26 +99,26 @@ public class Game {
 
         while (dealer.getHand().calculatedScore() < 17) {
             dealer.hit(deck, discarded);
-            pause(1000);
+            pause(longPause);
         }
 
         if (dealer.getHand().calculatedScore() > 21) {
-            System.out.println("Dealer losses\n");
-            pause(1000);
+            System.out.println(youWinLogo);
             wins++;
         } else if (dealer.getHand().calculatedScore() > player.getHand().calculatedScore()) {
-            System.out.println("You lose\n");
-            pause(1000);
+            System.out.println("YOU LOSE\n");
+            pause(longPause);
             losses++;
         } else if (player.getHand().calculatedScore() > dealer.getHand().calculatedScore()) {
-            System.out.println("You win\n");
-            pause(1000);
+            System.out.println(youWinLogo);
+            pause(longPause);
             wins++;
         } else {
             System.out.println("Even\n");
-            pause(1000);
+            pause(longPause);
             evens++;
         }
+
         startRound();
     }
 

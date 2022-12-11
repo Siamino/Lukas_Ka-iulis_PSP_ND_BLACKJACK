@@ -1,4 +1,4 @@
-public abstract class Person {
+public abstract class Person { //Abstrakti
     private Hand hand;
     private String name;
 
